@@ -1,0 +1,23 @@
+{
+  "name": "villasise_crwaling",
+  "version": "1.0.0",
+  "description": "villasise.com test crawling",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron . --debug"
+  },
+  "author": "hwang il young",
+  "license": "ISC",
+  "devDependencies": {
+    "devtron": "^1.4.0",
+    "electron": "^10.1.0"
+  },
+  "dependencies": {
+    "axios": "^0.20.0",
+    "cheerio": "^1.0.0-rc.3",
+    "electron-builder": "^22.8.0",
+    "path": "^0.12.7",
+    "selenium-webdriver": "^4.0.0-alpha.7"
+  }
+}

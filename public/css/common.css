@@ -1,0 +1,52 @@
+.progress {
+    width: 100%;
+    background-color: #ddd;
+}  
+.bar {
+    width: 10%;
+    height: 30px;
+    background-color: #4CAF50;
+    text-align: center;
+    line-height: 30px;
+    color: white;
+}
+
+/* 컨테이너 화면 숨김 */
+.container{
+  display: none;
+  opacity: 1;
+}
+
+.container.is-show{
+    display: inline-block;
+    opacity: 1;
+}
+  
+.menu-nav.is-hiding{
+    display: none;
+    opacity: 1;
+}
+
+/* =========================== */
+
+
+.menu-nav {
+    height:100%;
+}
+
+.menu-nav div {
+    float: left;
+ 
+}
+
+.menu-nav .left {
+    width: 50%;
+    height:100%;
+    background:#24252A;
+}
+
+.menu-nav .right {
+    width: 50%;
+    height:100%;
+    background: blue;
+}

@@ -1,0 +1,68 @@
+{
+    
+    "BASIC":{
+        "ID": "test01",
+        "PW": "test01",
+        "DESC": "기본",
+        "ISHOLO": 0
+    },
+    "SH":{
+        "LINK": "http://dev.villasise.com/usr/member/user/superApp.do?enc=WpN/61vhs4DQz8/RLkuDktis/hlEe4BYdW1wLdI3XbX9QBXVc7NAAcOX7O2GHtf5UAcUpQec6y3xmEhljDbP9Q==",
+        "DESC": "신한은행",
+        "ISHOLO": 0
+    },
+    "SL":{
+        "LINK": "http://dev.villasise.com/usr/member/user/shLifeApp.do?enc=83XE1udKC%2Bzyya45B%2FT%2BvtD3IVSugdgAK6nDAKnEOPH%2FtscJPz2pREJmUAfzK7S3",
+        "DESC": "신한생명",
+        "ISHOLO": 1
+    },
+    "HN":{
+        "ID": "test_hana",
+        "PW": "test_hana",
+        "DESC": "하나은행",
+        "ISHOLO": 1
+    },
+    "NG":{
+        "ID": "test_nara",
+        "PW": "test_nara",
+        "DESC": "나라감정평가",
+        "ISHOLO": 1
+    },
+    "SBI":{
+        "ID": "test_sbi",
+        "PW": "test_sbi",
+        "DESC": "SBI",
+        "ISHOLO": 0
+    },
+    "PP":{
+        "ID": "test_mortmaster",
+        "PW": "test_mortmaster",
+        "DESC": "페퍼저축은행",
+        "ISHOLO": 1
+    },
+    "KI":{
+        "ID": "test_kibank",
+        "PW": "test_kibank",
+        "DESC": "한국투자저축은행",
+        "ISHOLO": 1
+    },
+    "WC":{
+        "ID": "test_wc01",
+        "PW": "test_wc01",
+        "DESC": "웰컴저축은행",
+        "ISHOLO": 1
+    },
+    "NR":{
+        "ID": "test_nrcap",
+        "PW": "test_bigvalue_01",
+        "DESC": "앤알캐피탈",
+        "ISHOLO": 1
+    },
+    "LE":{
+        "ID": "test_leadcorp",
+        "PW": "test_bigvalue_01",
+        "DESC": "앤알캐피탈",
+        "ISHOLO": 1
+    }
+    
+}
