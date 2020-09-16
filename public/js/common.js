@@ -1,37 +1,29 @@
 const {Builder, By, Key, until} = require('selenium-webdriver')
 const fs = require('fs');
 
-
 window.$ = window.jQuery = require('./public/js/jquery-3.5.1.min.js')
 
-
+let targetUrl;
 document.body.addEventListener('click', (event) => {
 
     if (event.target.classList.contains('btn-real')) {
-        
-        console.log('Real VillaSise');
+        targetUrl = "http://villasise.com";
         document.querySelector('.container').classList.add('is-show')
         document.querySelector('.menu-nav').classList.add('is-hiding')
 
     } else if(event.target.classList.contains('btn-dev')) {
-        
-        console.log('Dev VillaSise');
+        targetUrl = "http://dev.villasise.com";
         document.querySelector('.container').classList.add('is-show')
         document.querySelector('.menu-nav').classList.add('is-hiding')
 
     } else if(event.target.classList.contains('btn-back')) {
         
-        console.log('Go Back');
         document.querySelector('.container').classList.remove('is-show')
         document.querySelector('.menu-nav').classList.remove('is-hiding')
-
     } else if(event.target.classList.contains('btn-check')) {
-
-        console.log('Start Check with Crawling');
-        const targetUrl = 'http://dev.villasise.com';
         example(targetUrl);
     }
-})
+});
 
 async function example(targetUrl) {
     let driver = await  new Builder().forBrowser('chrome').build();
@@ -109,6 +101,7 @@ async function example(targetUrl) {
 
         const nearContainer = await driver.findElement(By.id('nearContainer'));
 
+
         const nearDate = await nearContainer.findElement(By.css('.infotip_line>span:last-child')).getText();
         console.log(nearDate);
 
@@ -152,26 +145,14 @@ async function example(targetUrl) {
                 console.log('표시안됨');
             }
         });
-
-
         
         console.log('=========================================')
         console.log('=============본건 소속 역세권 분석============')
 
         const stationContainer = await driver.findElement(By.id('stationContainer'));
-        
-        
-        // averSisePerArea.getText().then((text) => {
-        //     console.log(text);
-        // });
 
-        
-
-        // navgation bar 클릭
-        // let atag = await driver.wait(until.elementLocated(By.className('nav2')), 10000);
-        // await atag.findElement(By.tagName('a')).click();
-
-
+    } catch (err) {
+        console.log(err);
     } finally {
       //await driver.quit();
     }
