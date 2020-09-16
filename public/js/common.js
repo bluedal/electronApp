@@ -1,6 +1,12 @@
 const {Builder, By, Key, until} = require('selenium-webdriver')
 const fs = require('fs');
 
+/* URL 및 계정 정보 */
+// const devAccount = fs.readFileSync('public/js/account_dev.json');
+// const realAccount = fs.readFileSync('public/js/account_real.json');
+// const jsonParse = devAccount.toString();
+// console.log(jsonParse);
+
 window.$ = window.jQuery = require('./public/js/jquery-3.5.1.min.js')
 
 let targetUrl;
@@ -95,6 +101,8 @@ async function example(targetUrl) {
             }
         });
 
+        await driver.findElement(By.className('nav2')).click();        
+
         console.log('=========================================')
         console.log('================주변 거래 사례==============')
 
@@ -146,13 +154,88 @@ async function example(targetUrl) {
             }
         });
         
+        await driver.findElement(By.className('nav3')).click();        
+
         console.log('=========================================')
         console.log('=============본건 소속 역세권 분석============')
 
         const stationContainer = await driver.findElement(By.id('stationContainer'));
+        const webTable = await stationContainer.findElements(By.css('.data_table_row .data_table_cell'));
 
-    } catch (err) {
-        console.log(err);
+        const isElement = await webTable[0].findElement(By.tagName('img')).isDisplayed();
+        console.log(isElement !== false);
+        console.log(webTable[1].getText() !== "");
+        console.log(webTable[2].getText() !== "");
+        console.log(webTable[3].getText() !== "");
+        console.log(webTable[4].getText() !== "");
+        console.log(webTable[5].getText() !== "");
+        console.log(webTable[6].getText());
+        console.log(webTable[7].getText());
+        console.log(webTable[8].getText());
+        console.log(webTable[9].getText());
+        console.log(webTable[10].getText());
+        console.log(webTable[11].getText());
+        
+        const stationMap = await stationContainer.findElement(By.id('stationMap')).findElement(By.tagName('div')).isDisplayed();
+        console.log(stationMap + "  맵 보여요.");
+
+        const stationContainerDealChart = await stationContainer.findElement(By.id('stationContainerDealChart')).findElement(By.tagName('div')).isDisplayed();
+        console.log(stationContainerDealChart + "  차트 보여요.");
+
+        const stationContainerDealChartDate = await stationContainer.findElement(By.css('.infotip_line>span:last-child')).getText();
+        console.log(stationContainerDealChartDate);
+
+        const stationBuildyearChart = await stationContainer.findElement(By.id('stationBuildyearChart')).findElement(By.tagName('div')).isDisplayed();
+        console.log(stationContainerDealChart + "  차트 보여요.");
+        
+        const stationPrivateAreaChart = await stationContainer.findElement(By.id('stationPrivateAreaChart')).findElement(By.tagName('div')).isDisplayed();
+        console.log(stationPrivateAreaChart + "  차트 보여요.");
+
+
+        console.log('=========================================');
+        console.log('===============지역별 시세조회===============');
+
+        const localContainer = await driver.findElement(By.id('localContainer'));
+
+        const islocalMap = await localContainer.findElement(By.id('localMap')).findElement(By.tagName('div')).isDisplayed();
+        console.log(islocalMap + " 맵 보여요.");
+
+        const localContainerDealChart = await localContainer.findElement(By.id('localContainerDealChart')).findElement(By.tagName('div')).isDisplayed();
+        console.log(localContainerDealChart + " 차트 보여요.");
+
+        const displayButton = await localContainer.findElement(By.className('web_table_display_button'));
+        await driver.executeScript('arguments[0].click()', displayButton);
+
+        const localBuildyearChart = await localContainer.findElement(By.id('localBuildyearChart')).findElement(By.tagName('div')).isDisplayed();
+        console.log(localBuildyearChart + " 차트 보여요.");
+        
+        const localPrivateAreaChart = await localContainer.findElement(By.id('localPrivateAreaChart')).findElement(By.tagName('div')).isDisplayed();
+        console.log(localPrivateAreaChart + " 차트 보여요.");
+
+        
+        console.log('=========================================');
+        console.log('==============시세 및 인구 추이==============');
+
+        const populationContainer = await driver.findElement(By.id('populationContainer'));
+
+        const populationContainerTable = await populationContainer.findElement(By.css('.populationTrend .data_table_row')).findElements(By.className('data_table_cell'));
+        populationContainerTable.forEach((data) => {
+            console.log(data.getText());
+        });
+        
+        const data_date_box = await populationContainer.findElement(By.css('.populationTrend .data_date_box')).findElements(By.tagName('p'));
+        data_date_box.forEach((data) => {
+            console.log(data.getText());
+        });
+
+        const populationContainerDealChart = await localContainer.findElement(By.id('populationContainerDealChart')).findElement(By.tagName('div')).isDisplayed();
+        console.log(populationContainerDealChart + " 차트 보여요.");
+        
+
+        
+
+    } catch (error) {
+        console.log(error)
     } finally {
       //await driver.quit();
     }

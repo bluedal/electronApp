@@ -56,6 +56,24 @@
     background-color: #008CBA;
 }
 
+.article {
+    width: 100%;
+    height: 100%; 
+    display: table;
+}
+
+.article .check-table {
+    width: 65%;
+    height: 100%; 
+    display: table-cell;
+}
+
+.article .check-list {
+    width: 35%;
+    height: 100%; 
+    display: table-cell;
+}
+
 /* =========button css effect========== */
 
 .menu-nav button {
