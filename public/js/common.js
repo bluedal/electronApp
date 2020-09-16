@@ -232,6 +232,17 @@ async function example(targetUrl) {
         console.log(populationContainerDealChart + " 차트 보여요.");
         
 
+        // 표보기1
+
+        const populationTrendTwoYears = await populationContainer.findElement(By.className('.populationTrendTwoYears'))
+
+        const populationTrendTwoYearsChart = await populationTrendTwoYears.findElement(By.id('populationTrendTwoYearsChart')).findElement(By.tagName('div')).isDisplayed();
+        console.log(populationTrendTwoYearsChart);
+
+        const reference_date_for_population = await populationTrendTwoYears.findElement(By.className('reference_date_for_population'));
+        console.log(reference_date_for_population);
+
+        
         
 
     } catch (error) {
