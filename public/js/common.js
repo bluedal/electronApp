@@ -34,41 +34,78 @@ document.body.addEventListener('click', (event) => {
 async function example(targetUrl) {
     let driver = await  new Builder().forBrowser('chrome').build();
     try {
-      
-        await driver.get(targetUrl);
 
+        await driver.get(targetUrl);
         // 로그인버튼 클릭
         await driver.findElement(By.linkText('로그인 및 회원가입')).click();
 
         // 회원정보 입력
         await driver.findElement(By.name('username')).sendKeys('test01');
-        await driver.findElement(By.name('password')).sendKeys('test01', Key.RETURN);
+        await driver.findElement(By.name('password')).sendKeys('big_test', Key.RETURN);
 
         // 주소 입력 후 해동 주소 클릭
         await driver.findElement(By.xpath("//input[@title='검색어 입력']")).sendKeys("대조동");
-        const address = await driver.wait(until.elementLocated(By.xpath("//a[@address='서울특별시 은평구 대조동 3-9번지']")), 10000);
+        const address = await driver.wait(until.elementLocated(By.xpath("//a[@address='서울특별시 은평구 대조동 3-9번지']")), 1000);
         await driver.executeScript('arguments[0].click()', address);
+
+
+        console.log('=================기본 정보================');
+
+        const basicContainer = await driver.findElement(By.id('basicContainer'));
+
+        // 암묵적 대기
+        driver.manage().setTimeouts( { implicit: 1000 } ); 
+
+        const map = await basicContainer.findElement(By.id('map')).findElement(By.tagName('div')).isDisplayed();
+        console.log(map + " 맵 보여요.");
+
+
+        const pano = await basicContainer.findElement(By.id('pano')).findElement(By.tagName('div')).isDisplayed();
+        console.log(pano + " 파노라마 맵 보여요.");
+
+
+        const basicContainerTable = await basicContainer.findElement(By.className('mobileT_layout')).findElements(By.className('data_table_row'));
+        basicContainerTable.forEach((data) => {
+                console.log(data.getText());
+        });
+
+        const gt_con = await basicContainer.findElement(By.className('gt_con'));
+
+        const homeComBox = await gt_con.findElement(By.name('honame')).isDisplayed();
+        console.log(homeComBox + " 호클릭 콤보박스 보여요.");
+
+        // const current = await gt_con.findElements(By.css('.list_s li'));
+        // current.forEach((data) => {
+        //     console.log(data.getAttribute('textContent'));
+        // });
 
         // 연립다세대 호 버튼 클릭
         const hoSelect = await driver.wait(until.elementLocated(By.xpath("//li[@title='301']")), 10000);
         await driver.executeScript('arguments[0].click()', hoSelect);
 
-        const averSise = await driver.wait(until.elementLocated(By.className('aver_sise')), 10000, 'Timed out after 30 seconds', 1000).getText();
-        console.log(averSise);
+        const hoSiseInfo = await driver.findElement(By.id('hoSiseInfo'));
 
-        const averSisePerArea = await driver.findElement(By.className('aver_sise_per_area')).getText();
-        console.log(averSisePerArea);
+        const ho_basic_info = await hoSiseInfo.findElement(By.id('ho_basic_info'));
 
-        const referenceDateForSise = await driver.findElement(By.className('reference_date_for_sise')).getText();
-        console.log(referenceDateForSise + ' 날짜');
         
-        const averSisePerAreaS = await driver.findElement(By.className('disable')).getText();
-        console.log(averSisePerArea.length);
+        const hoTable = await ho_basic_info.findElements(By.className('data_table_row'));
+        hoTable.forEach((data) => {
+            console.log(data.getText());
+        });
 
-        console.log('============2년간 시세 추이 시작=============')
+        const extra_tip = await ho_basic_info.findElements(By.className('extra_tip'));
+        extra_tip.forEach((data) => {
+            console.log(data.getText());
+        });
+
+        const abnormalIndicator = await hoSiseInfo.findElement(By.id('abnormalIndicator_info')).isDisplayed();
+        console.log(abnormalIndicator  + " 보조지표 출력");
+
+        console.log('========================================');
+        console.log('============2년간 시세 추이 시작=============');
 
         // 최근 2년간 시세 추이
-        const hoChart = await driver.findElement(By.id('ho_price_trend_two_years_data'));
+        const hoChart = await hoSiseInfo.findElement(By.id('ho_price_trend_two_years_data'));
 
         // 차트 표시 확인
         const hoContainer = hoChart.findElement(By.css('.highcharts-container'));
@@ -78,8 +115,8 @@ async function example(targetUrl) {
         const hoDate = await hoChart.findElement(By.css('.infotip_line>span:last-child')).getText();
         console.log(hoDate);
 
-        console.log('=========================================')
-        console.log('===============본건 거래 리스트==============')
+        console.log('=========================================');
+        console.log('===============본건 거래 리스트==============');
 
         const mainChart = await driver.findElement(By.id('main_deal_trend_five_years_data'));
 
@@ -103,57 +140,95 @@ async function example(targetUrl) {
 
         await driver.findElement(By.className('nav2')).click();        
 
-        console.log('=========================================')
-        console.log('================주변 거래 사례==============')
+        console.log('=========================================');
+        console.log('================주변 거래 사례==============');
 
 
         const nearContainer = await driver.findElement(By.id('nearContainer'));
+
+        const nearMap = await nearContainer.findElement(By.id('nearMap')).findElement(By.tagName('div')).isDisplayed();
+        console.log(nearMap + " 맵 표시돼요.");
 
 
         const nearDate = await nearContainer.findElement(By.css('.infotip_line>span:last-child')).getText();
         console.log(nearDate);
 
-        const nearDealCaseList = nearContainer.findElement(By.id('nearDealCaseList'));
-        const nearTableCell = await nearDealCaseList.findElements(By.css('.data_table_cell'));
-        nearTableCell.forEach((text)=>{
-            if(text.getAttribute('textContent') === ""){
-                console.log('값 없음');
-            } else {
-                console.log('값 있음');
-            }
+
+        
+        const nearDealCaseList = await nearContainer.findElement(By.id('nearDealCaseList'));
+
+        const spread_button = nearDealCaseList.findElement(By.className('displayOver880Block')).findElement(By.className('spread_button'));
+        await driver.executeScript('arguments[0].click()', spread_button);
+    
+        const displayOver880Block = await nearDealCaseList.findElement(By.className('displayOver880Block')).findElements(By.className('data_table_row'));
+        
+        console.log(displayOver880Block.length + " 주변거래사례")
+        await displayOver880Block.forEach((text)=>{
+            console.log(text.getText());
         });
         
-        const dataTableRow = nearDealCaseList.findElement(By.css('.data_table_row:first-child'));
+
+        // 표 클릭
+        const dataTableRow = await nearDealCaseList.findElement(By.css('.data_table_row:first-child'));
         await driver.executeScript('arguments[0].click()', dataTableRow);
 
-        //nearDealCompareLayerWrap
+        // //nearDealCompareLayerWrap
         const nearDealCompare = await driver.findElement(By.id('nearDealCompareLayerWrap'));
-        let compareItem;
-            if(nearDealCompare.isDisplayed()){
-                let compareItem = await nearDealCompare.findElements(By.className('Compare_item'));
-                compareItem.forEach((text)=>{
-                    if(text.getAttribute('textContent') === ""){
-                        console.log('값 없음');
-                    } else {
-                        console.log('값 있음');
-                    }
-                });
-            }
+            
 
+        // 본건 비교사례 모달창
+        const compareItem = await nearDealCompare.findElements(By.className('Compare_item'));
+        compareItem.forEach((data)=>{
+            console.log(data.getText());
+        });
+
+        // 암묵적 대기
+        driver.manage().setTimeouts( { implicit: 1000 } ); 
+
+        // 본건 비교사례 모달창 닫기
         const compareClose = await nearDealCompare.findElement(By.className('Compare_close'));
         await driver.executeScript('arguments[0].click()', compareClose);
 
+
+        // 주변거래사례 표 section
         const unitPriceDistributionWrap = await driver.findElement(By.id('unitPriceDistributionWrap'));
-        const test = await unitPriceDistributionWrap.findElements(By.className('highcharts-plot-lines-1'));
-        console.log( test == 6);
-        test.forEach((text)=>{
-            if(text.isDisplayed()){
-                console.log('표시됨');
-            } else {
-                console.log('표시안됨');
-            }
-        });
+
+        const privateAreaChart = await unitPriceDistributionWrap.findElement(By.id('privateAreaChart')).findElement(By.tagName('div')).isDisplayed();
+        console.log(privateAreaChart + " 전용면적 차트 보여요.");
         
+        const useDateChart = await unitPriceDistributionWrap.findElement(By.id('useDateChart')).findElement(By.tagName('div')).isDisplayed();
+        console.log(useDateChart + " 연식별 차트 보여요.");
+        
+        const yearmonChart = await unitPriceDistributionWrap.findElement(By.id('yearmonChart')).findElement(By.tagName('div')).isDisplayed();
+        console.log(yearmonChart + " 거래시기별 차트 보여요.");
+
+
+        const highchartslines = await unitPriceDistributionWrap.findElements(By.className('highcharts-plot-lines-1'));
+        console.log(highchartslines.length + " 실선 개수");
+        
+
+        const unitPriceWebTable = unitPriceDistributionWrap.findElement(By.className('web_table_display_button'));
+        await driver.executeScript('arguments[0].click()', unitPriceWebTable);
+
+        console.log('전용면적 표');
+        const privateAreaList = await unitPriceDistributionWrap.findElement(By.id('privateAreaList')).findElements(By.className('data_table_row'));
+        await privateAreaList.forEach((data) =>{
+            console.log(data.getText());
+        });
+
+        console.log('연식별 표');
+        const useDateList = await unitPriceDistributionWrap.findElement(By.id('useDateList')).findElements(By.className('data_table_row'));
+        await useDateList.forEach((data) =>{
+            console.log(data.getText());
+        });
+
+        console.log('거래시기별 표');
+        const yearmonList = await unitPriceDistributionWrap.findElement(By.id('yearmonList')).findElements(By.className('data_table_row'));
+        await yearmonList.forEach((data) =>{
+            console.log(data.getText());
+        });
+
+
         await driver.findElement(By.className('nav3')).click();        
 
         console.log('=========================================')
@@ -162,14 +237,15 @@ async function example(targetUrl) {
         const stationContainer = await driver.findElement(By.id('stationContainer'));
         const webTable = await stationContainer.findElements(By.css('.data_table_row .data_table_cell'));
 
-        const isElement = await webTable[0].findElement(By.tagName('img')).isDisplayed();
-        console.log(isElement !== false);
-        console.log(webTable[1].getText() !== "");
-        console.log(webTable[2].getText() !== "");
-        console.log(webTable[3].getText() !== "");
-        console.log(webTable[4].getText() !== "");
-        console.log(webTable[5].getText() !== "");
-        console.log(webTable[6].getText());
+        const isElement1 = await webTable[0].findElement(By.tagName('img')).isDisplayed();
+        console.log(isElement1 !== false);
+        console.log(webTable[1].getText());
+        console.log(webTable[2].getText());
+        console.log(webTable[3].getText());
+        console.log(webTable[4].getText());
+        console.log(webTable[5].getText());
+        const isElement2 = await webTable[6].findElement(By.tagName('img')).isDisplayed();
+        console.log(isElement2 !== false);
         console.log(webTable[7].getText());
         console.log(webTable[8].getText());
         console.log(webTable[9].getText());
@@ -270,12 +346,10 @@ async function example(targetUrl) {
 
 
         // 전입 전출지역
-
         const topTenTransference = await driver.findElement(By.className('topTenTransference'));
 
-
         const topTenTransList = await topTenTransference.findElement(By.id('topTenTransList')).findElements(By.className('data_table_row'));
-        console.log(topTenTransList.length + " 총 개수");
+        console.log(topTenTransList.length + " 전입 전출 총 개수");
 
         await topTenTransList.forEach((data) => {
             console.log(data.getText());
