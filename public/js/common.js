@@ -192,6 +192,8 @@ async function example(targetUrl) {
         console.log(stationPrivateAreaChart + "  차트 보여요.");
 
 
+        await driver.findElement(By.className('nav4')).click();     
+
         console.log('=========================================');
         console.log('===============지역별 시세조회===============');
 
@@ -213,10 +215,14 @@ async function example(targetUrl) {
         console.log(localPrivateAreaChart + " 차트 보여요.");
 
         
+        await driver.findElement(By.className('nav5')).click();     
+
         console.log('=========================================');
         console.log('==============시세 및 인구 추이==============');
 
         const populationContainer = await driver.findElement(By.id('populationContainer'));
+
+        const populationWebTable = await populationContainer.findElements(By.className('web_table_display_button'));
 
         const populationContainerTable = await populationContainer.findElement(By.css('.populationTrend .data_table_row')).findElements(By.className('data_table_cell'));
         populationContainerTable.forEach((data) => {
@@ -228,22 +234,65 @@ async function example(targetUrl) {
             console.log(data.getText());
         });
 
+        // 최근 2년간 시세 및 거래건수 추이
         const populationContainerDealChart = await populationContainer.findElement(By.id('populationContainerDealChart')).findElement(By.tagName('div')).isDisplayed();
         console.log(populationContainerDealChart + " 차트 보여요.");
+
+
+        // 표 열기 1
+        await driver.executeScript('arguments[0].click()', populationWebTable[0]); 
         
 
-        // 표보기1
-
+        //최근 2년간 인구 및 세대 추이
         const populationTrendTwoYears = await populationContainer.findElement(By.className('populationTrendTwoYears'))
 
         const populationTrendTwoYearsChart = await populationTrendTwoYears.findElement(By.id('populationTrendTwoYearsChart')).findElement(By.tagName('div')).isDisplayed();
         console.log(populationTrendTwoYearsChart + " 차트 보여요.");
 
         const reference_date_for_population = await populationTrendTwoYears.findElement(By.className('reference_date_for_population'));
-        console.log(reference_date_for_population.getText());
+        console.log(await reference_date_for_population.getText());
 
+        // 표 열기 2
+        await driver.executeScript('arguments[0].click()', populationWebTable[1]);         
+
+
+        //최근 2년간 인구이동 추이
+        const transferTrendTwoYears = await populationContainer.findElement(By.className('transferTrendTwoYears'));
+        const transferTrendTwoYearsChart = await transferTrendTwoYears.findElement(By.id('transferTrendTwoYearsChart')).findElement(By.tagName('div')).isDisplayed();
+        console.log(transferTrendTwoYearsChart + " 차트 보여요.");
         
+        const data_record_date = transferTrendTwoYears.findElement(By.className('data_record_date'));
+        console.log(await data_record_date.getText());
+
+        // 표 열기 3
+        await driver.executeScript('arguments[0].click()', populationWebTable[2]);         
+
+
+
+        // 전입 전출지역
+
+        const topTenTransference = await driver.findElement(By.className('topTenTransference'));
+
+
+        const topTenTransList = await topTenTransference.findElement(By.id('topTenTransList')).findElements(By.className('data_table_row'));
+        console.log(topTenTransList.length + " 총 개수");
+
+        await topTenTransList.forEach((data) => {
+            console.log(data.getText());
+        });
+
+        const infotip_line = await topTenTransference.findElement(By.className('infotip_line')).findElement(By.tagName('span:nth-child(2)'));
+        console.log(infotip_line.getText());
+
+        // 모바일용
+        // const topTenTransferenceChart = await topTenTransference.findElement(By.id('topTenTransferenceChart')).findElement(By.tagName('div')).isDisplayed();
+        // console.log(topTenTransferenceChart + " 차트 보여요.");
+
+        // const topTentransferChart = await topTenTransference.findElement(By.id('topTentransferChart')).findElement(By.tagName('div')).isDisplayed();
+        // console.log(topTentransferChart + " 차트 보여요.");
         
+        // const infotip_line = await (await topTenTransference.findElement(By.className('infotip_line'))).findElements(By.css('span:nth-child(2)'));
+        // console.log(await infotip_line.getText());
 
     } catch (error) {
         console.log(error)
