@@ -41,13 +41,12 @@ async function example(targetUrl) {
 
         // 회원정보 입력
         await driver.findElement(By.name('username')).sendKeys('test01');
-        await driver.findElement(By.name('password')).sendKeys('big_test', Key.RETURN);
+        await driver.findElement(By.name('password')).sendKeys('test01', Key.RETURN);
 
         // 주소 입력 후 해동 주소 클릭
         await driver.findElement(By.xpath("//input[@title='검색어 입력']")).sendKeys("대조동");
         const address = await driver.wait(until.elementLocated(By.xpath("//a[@address='서울특별시 은평구 대조동 3-9번지']")), 1000);
         await driver.executeScript('arguments[0].click()', address);
-
 
         console.log('=================기본 정보================');
 
@@ -65,6 +64,8 @@ async function example(targetUrl) {
 
 
         const basicContainerTable = await basicContainer.findElement(By.className('mobileT_layout')).findElements(By.className('data_table_row'));
+        
+        
         basicContainerTable.forEach((data) => {
                 console.log(data.getText());
         });
@@ -83,15 +84,17 @@ async function example(targetUrl) {
         const hoSelect = await driver.wait(until.elementLocated(By.xpath("//li[@title='301']")), 10000);
         await driver.executeScript('arguments[0].click()', hoSelect);
 
+        driver.manage().setTimeouts( { implicit: 1000 } ); 
+
         const hoSiseInfo = await driver.findElement(By.id('hoSiseInfo'));
 
         const ho_basic_info = await hoSiseInfo.findElement(By.id('ho_basic_info'));
-
-        
-        const hoTable = await ho_basic_info.findElements(By.className('data_table_row'));
-        hoTable.forEach((data) => {
+    
+        const hoTable1 = await ho_basic_info.findElements(By.className('data_table_row'));
+        hoTable1.forEach((data) => {
             console.log(data.getText());
         });
+
 
         const extra_tip = await ho_basic_info.findElements(By.className('extra_tip'));
         extra_tip.forEach((data) => {
